@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">UBC SimPL Lab Head Impact Monitoring App</string>
+    <string name="ubc_logo">UBC</string>
+    <string name="bt_connect">Connect to Device</string>
 </resources>
