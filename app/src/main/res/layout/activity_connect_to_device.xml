@@ -7,6 +7,17 @@
     tools:context=".ConnectToDeviceActivity">
 
     <ImageView
+        android:id="@+id/ubcLogo"
+        android:layout_width="411dp"
+        android:layout_height="147dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ubc_logo_small" />
+
+    <ImageView
         android:id="@+id/simplLabLogo"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
@@ -22,22 +33,10 @@
         android:id="@+id/connectButton"
         android:layout_width="173dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="168dp"
+        android:layout_marginBottom="312dp"
         android:text="@string/bt_connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/ubcLogo"
-        android:layout_width="411dp"
-        android:layout_height="147dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ubc_logo_small" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
