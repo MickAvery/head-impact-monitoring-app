@@ -3,23 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_configurations">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.bottomnav.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_configurations"
+        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration.ConfigurationFragment"
+        android:label="@string/title_configurations"
+        tools:layout="@layout/configuration_fragment" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.bottomnav.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_datalogdownload"
+        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.datalogdownload.DatalogDownloadFragment"
+        android:label="@string/title_datalogdownload"
+        tools:layout="@layout/datalog_download_fragment" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.bottomnav.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_schedule"
+        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.schedule.ScheduleFragment"
+        android:label="@string/title_schedule"
+        tools:layout="@layout/schedule_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_devterminal"
+        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.devterminal.DevTerminalFragment"
+        android:label="@string/title_devterminal"
+        tools:layout="@layout/dev_terminal_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_dfu"
+        android:name="com.example.ubcsimpllabheadimpactmonitoringapp.screens.dfu.DfuFragment"
+        android:label="@string/title_dfu"
+        tools:layout="@layout/dfu_fragment" />
 </navigation>
