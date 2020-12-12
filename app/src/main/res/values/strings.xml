@@ -9,4 +9,7 @@
     <string name="title_schedule">Schedule</string>
     <string name="title_devterminal">Dev Terminal</string>
     <string name="title_dfu">Firmware Update</string>
+
+    <string name="ubc_logo_description">UBC Logo</string>
+    <string name="simplab_logo_description">SimpLab Logo</string>
 </resources>
