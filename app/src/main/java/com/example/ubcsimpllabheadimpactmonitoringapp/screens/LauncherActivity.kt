@@ -1,5 +1,6 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.ParcelUuid
@@ -12,7 +13,7 @@ class LauncherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLauncherBinding
 
     /* TODO: figure out correct filter */
-    private var uuid: ParcelUuid = ParcelUuid.fromString("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")
+    private var uuid: ParcelUuid = ParcelUuid.fromString("0000110A-0000-1000-8000-00805F9B34FB")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
