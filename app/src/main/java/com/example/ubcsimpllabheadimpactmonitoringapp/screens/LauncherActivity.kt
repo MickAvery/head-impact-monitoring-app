@@ -6,8 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.ParcelUuid
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.ubcsimpllabheadimpactmonitoringapp.R
 import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ActivityLauncherBinding
+import kotlinx.android.synthetic.main.device_list_row.view.*
 import no.nordicsemi.android.support.v18.scanner.*
 
 class LauncherActivity : AppCompatActivity() {
@@ -15,7 +23,7 @@ class LauncherActivity : AppCompatActivity() {
     /*
      *
      */
-    private lateinit var binding: ActivityLauncherBinding
+    private lateinit var mBinding: ActivityLauncherBinding
 
     /*
      *
@@ -26,16 +34,16 @@ class LauncherActivity : AppCompatActivity() {
      * NOTE: BASE_UUID = 0000xxxx-0000-1000-8000-00805F9B34FB
      * WHERE: xxxx is the 16-bit UUID advertised by the device
      */
-    private var uuid_uart: ParcelUuid = ParcelUuid.fromString("00000001-0000-1000-8000-00805F9B34FB")
-    private var uuid_generic_dev: ParcelUuid = ParcelUuid.fromString("00001440-0000-1000-8000-00805F9B34FB")
+    private var mUuidUart: ParcelUuid = ParcelUuid.fromString("00000001-0000-1000-8000-00805F9B34FB")
+    private var mUuidGenericDev: ParcelUuid = ParcelUuid.fromString("00001440-0000-1000-8000-00805F9B34FB")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLauncherBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        mBinding = ActivityLauncherBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         /* find connect button */
-        val connectButton: Button = binding.connectButton
+        val connectButton: Button = mBinding.connectButton
 
         /* set button actions */
         connectButton.setOnClickListener {
@@ -73,7 +81,7 @@ class LauncherActivity : AppCompatActivity() {
     /**
      * Start scanning for BLE devices
      */
-    fun startScan() {
+    private fun startScan() {
         val filters: MutableList<ScanFilter> = ArrayList()
         val scanner: BluetoothLeScannerCompat = BluetoothLeScannerCompat.getScanner()
         val scanSettings: ScanSettings = ScanSettings.Builder()
@@ -84,8 +92,8 @@ class LauncherActivity : AppCompatActivity() {
                                                     .build()
 
         /* apply filters and start scan */
-        filters.add(ScanFilter.Builder().setServiceUuid(uuid_uart).build())
-        filters.add(ScanFilter.Builder().setServiceUuid(uuid_generic_dev).build())
+        filters.add(ScanFilter.Builder().setServiceUuid(mUuidUart).build())
+        filters.add(ScanFilter.Builder().setServiceUuid(mUuidGenericDev).build())
         scanner.startScan(filters, scanSettings, scanCallback)
     }
 
@@ -98,12 +106,76 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         override fun onBatchScanResults(results: MutableList<ScanResult>) {
-            super.onBatchScanResults(results)
-            /* TODO: add results to some list */
+            /* TODO: This is called multiple times after scanning, what to do? */
+            val recyclerView: RecyclerView = mBinding.devicesList
+            recyclerView.layoutManager = LinearLayoutManager(this@LauncherActivity)
+            val deviceAdapter = DeviceRecyclerAdapter()
+            recyclerView.adapter = deviceAdapter
+            deviceAdapter.submitList(results)
         }
 
         override fun onScanFailed(errorCode: Int) {
+            /* TODO: what to do on fail? */
             super.onScanFailed(errorCode)
         }
     }
+}
+
+/**
+ * TODO: DOCUMENTATION!!!
+ */
+class DeviceRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var mItems: MutableList<ScanResult> = ArrayList()
+
+    /**
+     * Creates individual view holders
+     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return DeviceViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.device_list_row, parent, false)
+        )
+    }
+
+    /**
+     * Set data in list
+     */
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder) {
+            is DeviceViewHolder -> {
+                holder.bind(mItems[position])
+            }
+        }
+    }
+
+    /**
+     * Returns number of items in list
+     */
+    override fun getItemCount(): Int {
+        return mItems.size
+    }
+
+    /**
+     * Set list of devices
+     */
+    fun submitList(devList: MutableList<ScanResult>) {
+        mItems = devList
+    }
+
+    /**
+     * Custom Viewholder class, describes each item in viewholder
+     */
+    class DeviceViewHolder constructor(
+        itemView: View
+    ): RecyclerView.ViewHolder(itemView) {
+
+        private val deviceRowName: TextView = itemView.dev_row_name
+        private val deviceRowSubname: TextView = itemView.dev_row_subname
+
+        fun bind(device: ScanResult) {
+            deviceRowName.text = device.scanRecord?.deviceName
+            deviceRowSubname.text = "1"
+        }
+    }
+
 }

@@ -4,39 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.LauncherActivity">
+    tools:context=".screens.LauncherActivity"
+    android:paddingTop="?attr/actionBarSize">
 
     <ImageView
         android:id="@+id/ubcLogo"
-        android:layout_width="411dp"
-        android:layout_height="147dp"
-        android:layout_marginTop="56dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/ubc_logo_description"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/simplLabLogo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ubc_logo_small" />
 
     <ImageView
         android:id="@+id/simplLabLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/connectButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ubcLogo"
         app:layout_constraintVertical_bias="0.045"
-        app:srcCompat="@drawable/simpl_lab_logo" />
+        app:srcCompat="@drawable/simpl_lab_logo"
+        android:contentDescription="@string/simplab_logo_description" />
 
     <Button
         android:id="@+id/connectButton"
         android:layout_width="173dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="312dp"
+        android:layout_marginTop="32dp"
         android:text="@string/bt_connect"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/simplLabLogo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/devices_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/connectButton"
+        tools:listitem="@layout/device_list_row" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

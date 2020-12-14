@@ -12,4 +12,5 @@
 
     <string name="ubc_logo_description">UBC Logo</string>
     <string name="simplab_logo_description">SimpLab Logo</string>
+    <string name="device_connect_button">CONNECT</string>
 </resources>
