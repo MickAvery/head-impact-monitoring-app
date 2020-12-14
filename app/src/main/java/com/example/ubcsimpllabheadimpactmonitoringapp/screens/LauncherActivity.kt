@@ -1,6 +1,7 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
 import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ActivityLauncherBinding
 import kotlinx.android.synthetic.main.device_list_row.view.*
@@ -150,7 +152,7 @@ class DeviceRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     /**
-     * Returns number of items in list
+     * @return number of items in list
      */
     override fun getItemCount(): Int {
         return mItems.size
@@ -179,7 +181,17 @@ class DeviceRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             deviceRowSubname.text = "1"
 
             deviceConnectButton.setOnClickListener {
-                Log.d("BLECONNECT", "CLICKED")
+                /* connect to device and register callbacks */
+                DeviceModel.connect(device.device, itemView.context)
+                .done {
+                    /* navigate to main activity */
+                    val intent = Intent(itemView.context, MainActivity::class.java)
+                    itemView.context.startActivity(intent)
+                }
+                .fail { device, status ->
+                    /* TODO: figure out what to do here */
+                    Log.d("BLECONN", "Failed to connect")
+                }
             }
         }
     }
