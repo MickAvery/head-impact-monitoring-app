@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
@@ -86,8 +87,8 @@ class LauncherActivity : AppCompatActivity() {
         val scanner: BluetoothLeScannerCompat = BluetoothLeScannerCompat.getScanner()
         val scanSettings: ScanSettings = ScanSettings.Builder()
                                                     .setLegacy(false)
-                                                    .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
-                                                    .setReportDelay(1000)
+                                                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                                                    .setReportDelay(5000)
                                                     .setUseHardwareBatchingIfSupported(false)
                                                     .build()
 
@@ -171,10 +172,15 @@ class DeviceRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private val deviceRowName: TextView = itemView.dev_row_name
         private val deviceRowSubname: TextView = itemView.dev_row_subname
+        private val deviceConnectButton: Button = itemView.dev_row_connect_button
 
         fun bind(device: ScanResult) {
             deviceRowName.text = device.scanRecord?.deviceName
             deviceRowSubname.text = "1"
+
+            deviceConnectButton.setOnClickListener {
+                Log.d("BLECONNECT", "CLICKED")
+            }
         }
     }
 
