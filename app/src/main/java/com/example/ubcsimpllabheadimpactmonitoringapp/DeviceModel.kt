@@ -3,13 +3,28 @@ package com.example.ubcsimpllabheadimpactmonitoringapp
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.Log
+import com.example.ubcsimpllabheadimpactmonitoringapp.ble.AppBleManager
 import no.nordicsemi.android.ble.ConnectRequest
 import no.nordicsemi.android.ble.observer.ConnectionObserver
 
+/**
+ * Device model, represents IMU device that app is connected to.
+ *
+ * Contains all information about device (configuration, firmware rev, etc.)
+ *
+ * @constructor Create empty Device model
+ */
 object DeviceModel : ConnectionObserver {
 
     private lateinit var mBleManager: AppBleManager
 
+    /**
+     * Connect to a device
+     *
+     * @param device Device to connect to, discovered after a scan
+     * @param context Current context
+     * @return ConnectionRequest, allows caller to supply custom callbacks for successful or failed connections
+     */
     fun connect(device: BluetoothDevice, context: Context): ConnectRequest {
         mBleManager = AppBleManager(context)
         mBleManager.setConnectionObserver(this)

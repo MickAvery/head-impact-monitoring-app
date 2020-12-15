@@ -1,4 +1,4 @@
-package com.example.ubcsimpllabheadimpactmonitoringapp
+package com.example.ubcsimpllabheadimpactmonitoringapp.ble
 
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattService
@@ -16,7 +16,11 @@ import java.util.*
  */
 class AppBleManager(context: Context) : BleManager(context) {
 
-    private var mNusUuid: UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+    /**
+     * M nus uuid
+     */
+    private var mNusServiceUuid: UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+    private var mSimplServiceUuid: UUID = UUID.fromString("32A20001-ED70-480B-A945-866522F66758") /* NOTE: not a typo, the name of the custom service is SimpL service */
 
     override fun getGattCallback(): BleManagerGattCallback {
         return AppBleManagerGattCallback()
@@ -37,10 +41,11 @@ class AppBleManager(context: Context) : BleManager(context) {
          */
         override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
             /* TODO: Add custom services as necessary */
-            /* check if NUS service is implemented */
-            val nusService: BluetoothGattService? = gatt.getService(this@AppBleManager.mNusUuid)
+            /* check if requried services are implemented */
+            val nusService: BluetoothGattService? = gatt.getService(this@AppBleManager.mNusServiceUuid)
+            val simplService: BluetoothGattService? = gatt.getService(this@AppBleManager.mSimplServiceUuid)
 
-            return true
+            return nusService != null && simplService != null
         }
 
         /**
@@ -49,7 +54,6 @@ class AppBleManager(context: Context) : BleManager(context) {
          */
         override fun initialize() {
             requestMtu(247).enqueue()
-//            super.initialize()
         }
 
         /**
