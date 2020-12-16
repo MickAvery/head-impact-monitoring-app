@@ -14,4 +14,11 @@
     <string name="ubc_logo_description">UBC Logo</string>
     <string name="simplab_logo_description">SimpLab Logo</string>
     <string name="device_connect_button">CONNECT</string>
+
+    <!-- Datalog mode configuration strings -->
+    <string name="config_screen_datalog_mode_text">Datalog Mode</string>
+    <string-array name="string_array_datalog_mode_options">
+        <item>Continuous</item>
+        <item>Trigger</item>
+    </string-array>
 </resources>
