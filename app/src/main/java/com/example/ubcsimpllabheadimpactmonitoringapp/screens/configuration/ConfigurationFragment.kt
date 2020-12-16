@@ -20,15 +20,43 @@ class ConfigurationFragment : Fragment() {
     private lateinit var viewModel: ConfigurationViewModel
     private lateinit var mBinding: ConfigurationFragmentBinding
 
+    /**
+     * The first to be called upon creation of MainActivity
+     *
+     * @param savedInstanceState
+     */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
+
+    /**
+     * Have fragment instantiate its interface views
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         /* get ViewBinding */
         mBinding = ConfigurationFragmentBinding.inflate(layoutInflater)
+        return mBinding.root
+    }
 
+    /**
+     * Operate on views that were created in onCreateView()
+     *
+     * @param view
+     * @param savedInstanceState
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         /* set ActionBar title */
-        activity?.title = "Configure Device"
+        activity?.title = getString(R.string.config_screen_actionbar_title)
 
         /* set Spinner contents */
         val datalogModeSpinner: Spinner = mBinding.spinnerDatalogMode
@@ -40,14 +68,6 @@ class ConfigurationFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             datalogModeSpinner.adapter = adapter
         }
-
-        return mBinding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

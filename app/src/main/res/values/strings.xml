@@ -15,10 +15,20 @@
     <string name="simplab_logo_description">SimpLab Logo</string>
     <string name="device_connect_button">CONNECT</string>
 
+    <!-- LauncherActivity strings -->
+    <string name="launcher_activity_actionbar_title">UBC SimpLab</string>
+
     <!-- Datalog mode configuration strings -->
+    <string name="config_screen_actionbar_title">Device Configurations</string>
     <string name="config_screen_datalog_mode_text">Datalog Mode</string>
     <string-array name="string_array_datalog_mode_options">
         <item>Continuous</item>
         <item>Trigger</item>
     </string-array>
+
+    <!-- Datalog Download Fragment strings -->
+    <string name="datalog_download_screen_actionbar_title">Datalog Download</string>
+
+    <!-- Developer Terminal Fragment Strings -->
+    <string name="dev_terminal_screen_actionbar_title">Developer Terminal</string>
 </resources>
