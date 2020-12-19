@@ -21,9 +21,20 @@
     <!-- Datalog mode configuration strings -->
     <string name="config_screen_actionbar_title">Device Configurations</string>
     <string name="config_screen_datalog_mode_text">Datalog Mode</string>
+
     <string-array name="string_array_datalog_mode_options">
         <item>Continuous</item>
         <item>Trigger</item>
+    </string-array>
+
+    <string-array name="string_array_trigger_on_options">
+        <item>Linear Acceleration</item>
+        <item>Angular Velocity</item>
+    </string-array>
+
+    <string-array name="string_array_trigger_axis_options">
+        <item>Resultant</item>
+        <item>Per-axis</item>
     </string-array>
 
     <!-- Datalog Download Fragment strings -->

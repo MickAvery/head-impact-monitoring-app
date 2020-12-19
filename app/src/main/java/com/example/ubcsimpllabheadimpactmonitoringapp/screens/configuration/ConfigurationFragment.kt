@@ -68,6 +68,26 @@ class ConfigurationFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             datalogModeSpinner.adapter = adapter
         }
+
+        val triggerOnSpinner: Spinner = mBinding.spinnerTriggerOn
+        ArrayAdapter.createFromResource(
+            requireActivity().applicationContext,
+            R.array.string_array_trigger_on_options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            triggerOnSpinner.adapter = adapter
+        }
+
+        val triggerAxisSpinner: Spinner = mBinding.spinnerTriggerAxis
+        ArrayAdapter.createFromResource(
+            requireActivity().applicationContext,
+            R.array.string_array_trigger_axis_options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            triggerAxisSpinner.adapter = adapter
+        }
     }
 
 }
