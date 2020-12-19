@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
 import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ConfigurationFragmentBinding
 
@@ -58,36 +59,63 @@ class ConfigurationFragment : Fragment() {
         /* set ActionBar title */
         activity?.title = getString(R.string.config_screen_actionbar_title)
 
-        /* set Spinner contents */
+        /*
+         * set Spinner contents
+         */
+
+        /* "Datalog Mode" spinner, get values from DatalogModeEnum */
         val datalogModeSpinner: Spinner = mBinding.spinnerDatalogMode
-        ArrayAdapter.createFromResource(
-            requireActivity().applicationContext,
-            R.array.string_array_datalog_mode_options,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            datalogModeSpinner.adapter = adapter
-        }
+        datalogModeSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.DatalogModeEnum.values()
+            )
 
+        /* "Trigger on..." spinner, get values from TriggerOnEnum */
         val triggerOnSpinner: Spinner = mBinding.spinnerTriggerOn
-        ArrayAdapter.createFromResource(
-            requireActivity().applicationContext,
-            R.array.string_array_trigger_on_options,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            triggerOnSpinner.adapter = adapter
-        }
+        triggerOnSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.TriggerOnEnum.values()
+            )
 
+        /* "Trigger axis" spinner, get values from TriggerAxisEnum */
         val triggerAxisSpinner: Spinner = mBinding.spinnerTriggerAxis
-        ArrayAdapter.createFromResource(
-            requireActivity().applicationContext,
-            R.array.string_array_trigger_axis_options,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            triggerAxisSpinner.adapter = adapter
-        }
+        triggerAxisSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.TriggerAxisEnum.values()
+            )
+
+        /* "Gyroscope sample rate" spinner */
+        val gyroSampleRateSpinner: Spinner = mBinding.spinnerSamplingRateGyro
+        gyroSampleRateSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.GyroscopeSamplingEnum.values()
+            )
+
+        /* "Low-G Accelerometer sample rate" spinner */
+        val lowGAccSampleRateSpinner: Spinner = mBinding.spinnerSamplingRateLowGAccel
+        lowGAccSampleRateSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.LowGAccelerometerSamplingEnum.values()
+            )
+
+        /* "High-G Accelerometer sample rate" spinner */
+        val highGAccSampleRateSpinner: Spinner = mBinding.spinnerSamplingRateHighGAccel
+        highGAccSampleRateSpinner.adapter =
+            ArrayAdapter(
+                requireActivity().applicationContext,
+                android.R.layout.simple_spinner_dropdown_item,
+                Configurations.HighGAccelerometerSamplingEnum.values()
+            )
     }
 
 }

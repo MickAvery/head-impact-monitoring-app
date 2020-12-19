@@ -515,20 +515,16 @@
                     app:layout_constraintStart_toStartOf="@+id/text_sampling_rate_gyro_header"
                     app:layout_constraintTop_toBottomOf="@+id/text_sampling_rate_gyro_header" />
 
-                <EditText
-                    android:id="@+id/edittext_sampling_rate_gyro"
+                <Spinner
+                    android:id="@+id/spinner_sampling_rate_gyro"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:ems="10"
-                    android:hint="Gyroscope sampling rate"
-                    android:imeOptions="actionDone"
-                    android:includeFontPadding="false"
-                    android:inputType="number"
-                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:layout_constraintWidth_percent="0.4" />
 
                 <TextView
@@ -536,8 +532,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Current: XXX"
-                    app:layout_constraintStart_toStartOf="@+id/edittext_sampling_rate_gyro"
-                    app:layout_constraintTop_toBottomOf="@+id/edittext_sampling_rate_gyro" />
+                    app:layout_constraintStart_toStartOf="@+id/spinner_sampling_rate_gyro"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_sampling_rate_gyro" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -579,20 +575,16 @@
                     app:layout_constraintStart_toStartOf="@+id/text_sampling_rate_low_g_accel_header"
                     app:layout_constraintTop_toBottomOf="@+id/text_sampling_rate_low_g_accel_header" />
 
-                <EditText
-                    android:id="@+id/edittext_sampling_rate_low_g_accel"
+                <Spinner
+                    android:id="@+id/spinner_sampling_rate_low_g_accel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:ems="10"
-                    android:hint="Low-G Accelerometer sampling rate"
-                    android:imeOptions="actionDone"
-                    android:includeFontPadding="false"
-                    android:inputType="number"
-                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:layout_constraintWidth_percent="0.4" />
 
                 <TextView
@@ -600,8 +592,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Current: XXX"
-                    app:layout_constraintStart_toStartOf="@+id/edittext_sampling_rate_low_g_accel"
-                    app:layout_constraintTop_toBottomOf="@+id/edittext_sampling_rate_low_g_accel" />
+                    app:layout_constraintStart_toStartOf="@+id/spinner_sampling_rate_low_g_accel"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_sampling_rate_low_g_accel" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -643,20 +635,16 @@
                     app:layout_constraintStart_toStartOf="@+id/text_sampling_rate_high_g_accel_header"
                     app:layout_constraintTop_toBottomOf="@+id/text_sampling_rate_high_g_accel_header" />
 
-                <EditText
-                    android:id="@+id/edittext_sampling_rate_high_g_accel"
+                <Spinner
+                    android:id="@+id/spinner_sampling_rate_high_g_accel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:ems="10"
-                    android:hint="High-G Accelerometer sampling rate"
-                    android:imeOptions="actionDone"
-                    android:includeFontPadding="false"
-                    android:inputType="number"
-                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:layout_constraintWidth_percent="0.4" />
 
                 <TextView
@@ -664,8 +652,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Current: XXX"
-                    app:layout_constraintStart_toStartOf="@+id/edittext_sampling_rate_high_g_accel"
-                    app:layout_constraintTop_toBottomOf="@+id/edittext_sampling_rate_high_g_accel" />
+                    app:layout_constraintStart_toStartOf="@+id/spinner_sampling_rate_high_g_accel"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_sampling_rate_high_g_accel" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
