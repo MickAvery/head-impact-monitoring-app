@@ -2,10 +2,12 @@ package com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations
@@ -18,7 +20,7 @@ class ConfigurationFragment : Fragment() {
         fun newInstance() = ConfigurationFragment()
     }
 
-    private lateinit var viewModel: ConfigurationViewModel
+    private lateinit var mViewModel: ConfigurationViewModel
     private lateinit var mBinding: ConfigurationFragmentBinding
 
     /**
@@ -28,7 +30,7 @@ class ConfigurationFragment : Fragment() {
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
@@ -116,6 +118,67 @@ class ConfigurationFragment : Fragment() {
                 android.R.layout.simple_spinner_dropdown_item,
                 Configurations.HighGAccelerometerSamplingEnum.values()
             )
+
+        /*
+         * Set view listeners
+         */
+
+        datalogModeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when( Configurations.DatalogModeEnum.values()[position] ) {
+                    Configurations.DatalogModeEnum.CONTINUOUS -> {
+                        /* Hide trigger configurations */
+                        mBinding.layoutTriggerViewgroup.visibility = View.GONE
+                    }
+                    Configurations.DatalogModeEnum.TRIGGER -> {
+                        /* Set visibility of other trigger configurations */
+                        mBinding.layoutTriggerViewgroup.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+        }
+
+        triggerAxisSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when( Configurations.TriggerAxisEnum.values()[position] ) {
+                    Configurations.TriggerAxisEnum.RESULTANT -> {
+                        /* Only show resultant threshold configuration option */
+                        mBinding.layoutTriggerThresholdResultant.visibility = View.VISIBLE
+                        /* Hide per-axis configuration options */
+                        mBinding.layoutTriggerThresholdX.visibility = View.GONE
+                        mBinding.layoutTriggerThresholdY.visibility = View.GONE
+                        mBinding.layoutTriggerThresholdZ.visibility = View.GONE
+                    }
+                    Configurations.TriggerAxisEnum.PER_AXIS -> {
+                        /* Hide resultant threshold configuration option */
+                        mBinding.layoutTriggerThresholdResultant.visibility = View.GONE
+                        /* Only show per-axis configuration options */
+                        mBinding.layoutTriggerThresholdX.visibility = View.VISIBLE
+                        mBinding.layoutTriggerThresholdY.visibility = View.VISIBLE
+                        mBinding.layoutTriggerThresholdZ.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+
+        }
     }
 
 }
