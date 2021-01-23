@@ -1,16 +1,18 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations
+import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
 import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ConfigurationFragmentBinding
 
@@ -20,18 +22,29 @@ class ConfigurationFragment : Fragment() {
         fun newInstance() = ConfigurationFragment()
     }
 
-    private lateinit var mViewModel: ConfigurationViewModel
+    /**
+     * ViewModel and ViewBindings
+     */
+    private val mViewModel: ConfigurationViewModel by viewModels()
+//    private val mViewModel: ConfigurationViewModel =
+//        ViewModelProvider(this).get(ConfigurationViewModel::class.java)
     private lateinit var mBinding: ConfigurationFragmentBinding
 
     /**
-     * The first to be called upon creation of MainActivity
+     * Fragment views for easy referencing
+     */
+    private lateinit var mDatalogModeSpinner: Spinner
+    private lateinit var mTriggerOnSpinner: Spinner
+    private lateinit var mConfigDevBtn: Button
+
+    /**
+     * Restore ViewModel state when user navigates back here
      *
      * @param savedInstanceState
      */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        mViewModel.restoreViewModelState()
     }
 
     /**
@@ -58,6 +71,8 @@ class ConfigurationFragment : Fragment() {
      * @param savedInstanceState
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         /* set ActionBar title */
         activity?.title = getString(R.string.config_screen_actionbar_title)
 
@@ -66,8 +81,8 @@ class ConfigurationFragment : Fragment() {
          */
 
         /* "Datalog Mode" spinner, get values from DatalogModeEnum */
-        val datalogModeSpinner: Spinner = mBinding.spinnerDatalogMode
-        datalogModeSpinner.adapter =
+        mDatalogModeSpinner = mBinding.spinnerDatalogMode
+        mDatalogModeSpinner.adapter =
             ArrayAdapter(
                 requireActivity().applicationContext,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -75,8 +90,8 @@ class ConfigurationFragment : Fragment() {
             )
 
         /* "Trigger on..." spinner, get values from TriggerOnEnum */
-        val triggerOnSpinner: Spinner = mBinding.spinnerTriggerOn
-        triggerOnSpinner.adapter =
+        mTriggerOnSpinner = mBinding.spinnerTriggerOn
+        mTriggerOnSpinner.adapter =
             ArrayAdapter(
                 requireActivity().applicationContext,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -120,17 +135,28 @@ class ConfigurationFragment : Fragment() {
             )
 
         /*
+         * Set spinner values based on state saved by ViewModel
+         * TODO: set spinner values based on saved device configs
+         */
+        mDatalogModeSpinner.setSelection(mViewModel.mDatalogMode.ordinal)
+        mTriggerOnSpinner.setSelection(mViewModel.mTriggerOn.ordinal)
+
+        /*
          * Set view listeners
          */
 
-        datalogModeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        /* "Datalog Mode" spinner listener */
+        mDatalogModeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
-                when( Configurations.DatalogModeEnum.values()[position] ) {
+                val itemSelected: Configurations.DatalogModeEnum =
+                    Configurations.DatalogModeEnum.values()[position]
+
+                when( itemSelected ) {
                     Configurations.DatalogModeEnum.CONTINUOUS -> {
                         /* Hide trigger configurations */
                         mBinding.layoutTriggerViewgroup.visibility = View.GONE
@@ -140,13 +166,34 @@ class ConfigurationFragment : Fragment() {
                         mBinding.layoutTriggerViewgroup.visibility = View.VISIBLE
                     }
                 }
+
+                /* save selected item to viewmodel */
+                mViewModel.mDatalogMode = itemSelected
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 /* Do nothing */
             }
-        }
+        } /* AdapterView.OnItemSelectedListener */
 
+        /* "Trigger on..." spinner listener */
+        mTriggerOnSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                /* save selected item to viewmodel */
+                mViewModel.mTriggerOn = Configurations.TriggerOnEnum.values()[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+        } /* AdapterView.OnItemSelectedListener */
+
+        /* "Trigger Axis" spinner listener */
         triggerAxisSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -154,31 +201,43 @@ class ConfigurationFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when( Configurations.TriggerAxisEnum.values()[position] ) {
+                val itemSelected: Configurations.TriggerAxisEnum =
+                    Configurations.TriggerAxisEnum.values()[position]
+
+                when( itemSelected ) {
                     Configurations.TriggerAxisEnum.RESULTANT -> {
                         /* Only show resultant threshold configuration option */
                         mBinding.layoutTriggerThresholdResultant.visibility = View.VISIBLE
                         /* Hide per-axis configuration options */
-                        mBinding.layoutTriggerThresholdX.visibility = View.GONE
-                        mBinding.layoutTriggerThresholdY.visibility = View.GONE
-                        mBinding.layoutTriggerThresholdZ.visibility = View.GONE
+                        mBinding.layoutTriggerPerAxisViewgroup.visibility = View.GONE
                     }
                     Configurations.TriggerAxisEnum.PER_AXIS -> {
                         /* Hide resultant threshold configuration option */
                         mBinding.layoutTriggerThresholdResultant.visibility = View.GONE
                         /* Only show per-axis configuration options */
-                        mBinding.layoutTriggerThresholdX.visibility = View.VISIBLE
-                        mBinding.layoutTriggerThresholdY.visibility = View.VISIBLE
-                        mBinding.layoutTriggerThresholdZ.visibility = View.VISIBLE
+                        mBinding.layoutTriggerPerAxisViewgroup.visibility = View.VISIBLE
                     }
                 }
+
+                mViewModel.mTriggerAxis = itemSelected
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 /* Do nothing */
             }
+        } /* AdapterView.OnItemSelectedListener */
 
+        mConfigDevBtn = mBinding.buttonConfigureDevice
+        mConfigDevBtn.setOnClickListener {
+            DeviceModel.txTest()
         }
     }
 
+    /**
+     * Save ViewModel state when user navigates out of screen
+     */
+    override fun onStop() {
+        super.onStop()
+        mViewModel.saveViewModelState()
+    }
 }

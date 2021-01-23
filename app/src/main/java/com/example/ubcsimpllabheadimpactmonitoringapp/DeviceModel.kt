@@ -38,6 +38,24 @@ object DeviceModel : ConnectionObserver {
         return connReq
     }
 
+    /**
+     * Sync device datetime with phone datetime
+     */
+    fun deviceDatetimeSync() {
+        TODO("not implemented")
+    }
+
+    /**
+     * Get device's current datetime
+     */
+    fun deviceDatetimeGet() {
+        TODO("not implemented")
+    }
+
+    fun txTest() {
+        mBleManager.sendToDevice()
+    }
+
     override fun onDeviceReady(device: BluetoothDevice) {
         /* Do nothing */
         Log.d("BLECONN", "onDeviceReady")

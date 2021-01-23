@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
             <!-- Datalog mode section -->
@@ -300,198 +301,206 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_trigger_threshold_x"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:id="@+id/layout_trigger_per_axis_viewgroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
 
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_x_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Trigger threshold"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_x_subheader"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="X axis"
-                        app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_x_header"
-                        app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_x_header" />
-
-                    <EditText
-                        android:id="@+id/edittext_trigger_threshold_x"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:ems="10"
-                        android:hint="X-axis threshold"
-                        android:imeOptions="actionDone"
-                        android:includeFontPadding="false"
-                        android:inputType="number"
-                        android:textSize="14sp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_trigger_threshold_x"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="0.4" />
-
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_x_current"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Current: XXX"
-                        app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_x"
-                        app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_x" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:id="@+id/view6"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_trigger_threshold_y"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_y_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Trigger threshold"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_y_subheader"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Y axis"
-                        app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_y_header"
-                        app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_y_header" />
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_x_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Trigger threshold"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
-                        android:id="@+id/edittext_trigger_threshold_y"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:ems="10"
-                        android:hint="Y-axis threshold"
-                        android:imeOptions="actionDone"
-                        android:includeFontPadding="false"
-                        android:inputType="number"
-                        android:textSize="14sp"
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_x_subheader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X axis"
+                            app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_x_header"
+                            app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_x_header" />
+
+                        <EditText
+                            android:id="@+id/edittext_trigger_threshold_x"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:ems="10"
+                            android:hint="X-axis threshold"
+                            android:imeOptions="actionDone"
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.4" />
+
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_x_current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Current: XXX"
+                            app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_x"
+                            app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_x" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view6"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="0.4" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_y_current"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Current: XXX"
-                        app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_y"
-                        app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_y" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:id="@+id/view7"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_trigger_threshold_z"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_z_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Trigger threshold"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_trigger_threshold_y"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_z_subheader"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Z axis"
-                        app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_z_header"
-                        app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_z_header" />
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_y_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Trigger threshold"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
-                        android:id="@+id/edittext_trigger_threshold_z"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:ems="10"
-                        android:hint="Z-axis threshold"
-                        android:imeOptions="actionDone"
-                        android:includeFontPadding="false"
-                        android:inputType="number"
-                        android:textSize="14sp"
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_y_subheader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y axis"
+                            app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_y_header"
+                            app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_y_header" />
+
+                        <EditText
+                            android:id="@+id/edittext_trigger_threshold_y"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:ems="10"
+                            android:hint="Y-axis threshold"
+                            android:imeOptions="actionDone"
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.4" />
+
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_y_current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Current: XXX"
+                            app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_y"
+                            app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_y" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view7"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="0.4" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                    <TextView
-                        android:id="@+id/text_trigger_threshold_z_current"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Current: XXX"
-                        app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_z"
-                        app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_z" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_trigger_threshold_z"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_z_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Trigger threshold"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_z_subheader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Z axis"
+                            app:layout_constraintStart_toStartOf="@+id/text_trigger_threshold_z_header"
+                            app:layout_constraintTop_toBottomOf="@+id/text_trigger_threshold_z_header" />
+
+                        <EditText
+                            android:id="@+id/edittext_trigger_threshold_z"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:ems="10"
+                            android:hint="Z-axis threshold"
+                            android:imeOptions="actionDone"
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.4" />
+
+                        <TextView
+                            android:id="@+id/text_trigger_threshold_z_current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Current: XXX"
+                            app:layout_constraintStart_toStartOf="@+id/edittext_trigger_threshold_z"
+                            app:layout_constraintTop_toBottomOf="@+id/edittext_trigger_threshold_z" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view8"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:id="@+id/view8"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="0dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_sampling_rate_gyro"
