@@ -38,16 +38,6 @@ class ConfigurationFragment : Fragment() {
     private lateinit var mConfigDevBtn: Button
 
     /**
-     * Restore ViewModel state when user navigates back here
-     *
-     * @param savedInstanceState
-     */
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        mViewModel.restoreViewModelState()
-    }
-
-    /**
      * Have fragment instantiate its interface views
      *
      * @param inflater
@@ -229,15 +219,7 @@ class ConfigurationFragment : Fragment() {
 
         mConfigDevBtn = mBinding.buttonConfigureDevice
         mConfigDevBtn.setOnClickListener {
-            DeviceModel.txTest()
+            DeviceModel.deviceGetConfigs()
         }
-    }
-
-    /**
-     * Save ViewModel state when user navigates out of screen
-     */
-    override fun onStop() {
-        super.onStop()
-        mViewModel.saveViewModelState()
     }
 }

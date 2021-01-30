@@ -5,6 +5,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
 
 class MainActivity : AppCompatActivity() {
@@ -16,5 +17,11 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
+
+        /* get device configs */
+        DeviceModel.deviceGetConfigs()
+
+        /* update device datetime */
+//        DeviceModel.deviceDatetimeSync()
     }
 }

@@ -38,18 +38,11 @@ class ConfigurationViewModel(private val state: SavedStateHandle) : ViewModel() 
     var mHighGAccelSamplingRate: Configurations.HighGAccelerometerSamplingEnum =
         Configurations.HighGAccelerometerSamplingEnum.HIGH_G_ACC_SAMPLE_6400HZ
 
-    /**
-     * Save view model state
-     */
-    fun saveViewModelState() {
-//        vmState.set(DATALOG_MODE, mDatalogMode)
+    fun getDeviceConfigs() {
+
     }
 
-    /**
-     * Restore view model state
-     */
-    fun restoreViewModelState() {
-//        if(vmState.contains(DATALOG_MODE))
-//            mDatalogMode = vmState.get(DATALOG_MODE)!!
+    fun setDeviceConfigs() {
+
     }
 }

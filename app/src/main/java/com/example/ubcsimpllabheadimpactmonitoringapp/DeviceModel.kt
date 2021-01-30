@@ -5,6 +5,10 @@ import android.content.Context
 import android.util.Log
 import com.example.ubcsimpllabheadimpactmonitoringapp.ble.AppBleManager
 import no.nordicsemi.android.ble.ConnectRequest
+import no.nordicsemi.android.ble.WriteRequest
+import no.nordicsemi.android.ble.callback.DataReceivedCallback
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback
+import no.nordicsemi.android.ble.data.Data
 import no.nordicsemi.android.ble.observer.ConnectionObserver
 
 /**
@@ -17,6 +21,14 @@ import no.nordicsemi.android.ble.observer.ConnectionObserver
 object DeviceModel : ConnectionObserver {
 
     private lateinit var mBleManager: AppBleManager
+
+    private var mDevConfCharCallback: DataReceivedCallback = object: DeviceConfigDataCallback() { }
+
+    private enum class Requests(val req: Byte) {
+        DEV_GET_CONFIGS  (0x00),
+        DEV_SET_DATETIME (0x01),
+        DEV_UPDATE_CONFIG(0x02)
+    }
 
     /**
      * Connect to a device
@@ -39,26 +51,25 @@ object DeviceModel : ConnectionObserver {
     }
 
     /**
-     * Sync device datetime with phone datetime
+     * Get all important information from device, including:
+     *   - Device configs
+     *   - Current device datetime
+     *   - If datalog file is ready for download
+     *
+     * Returns WriteRequest object which can be used to set callbacks.
+     *
+     * @return WriteRequest object which can be used to set callbacks
      */
-    fun deviceDatetimeSync() {
-        TODO("not implemented")
-    }
-
-    /**
-     * Get device's current datetime
-     */
-    fun deviceDatetimeGet() {
-        TODO("not implemented")
-    }
-
-    fun txTest() {
-        mBleManager.sendToDevice()
+    fun deviceGetConfigs(): WriteRequest {
+        val bytes: ByteArray = byteArrayOf(Requests.DEV_GET_CONFIGS.req)
+        return mBleManager.sendBytesToDevice(bytes)
     }
 
     override fun onDeviceReady(device: BluetoothDevice) {
-        /* Do nothing */
         Log.d("BLECONN", "onDeviceReady")
+
+        /* Set notification callback for Device Configs Characteristic */
+        mBleManager.setDevConfCharNotificationCallback(mDevConfCharCallback)
     }
 
     override fun onDeviceConnecting(device: BluetoothDevice) {
@@ -84,6 +95,24 @@ object DeviceModel : ConnectionObserver {
     override fun onDeviceFailedToConnect(device: BluetoothDevice, reason: Int) {
         /* Do nothing */
         Log.d("BLECONN", "onDeviceFailedToConnect")
+    }
+
+    /**
+     * Custom callback for Device Configs Characteristic
+     *
+     * @constructor
+     */
+    private abstract class DeviceConfigDataCallback: ProfileDataCallback {
+
+        /**
+         * Goes here if notification received on Device Configs Characteristic
+         *
+         * @param device
+         * @param data
+         */
+        override fun onDataReceived(device: BluetoothDevice, data: Data) {
+            Log.d("BLE" ,"$device --- ${data.size()} --- $data")
+        }
     }
 
 }

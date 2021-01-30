@@ -5,7 +5,12 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
+import com.example.ubcsimpllabheadimpactmonitoringapp.screens.MainActivity
 import no.nordicsemi.android.ble.BleManager
+import no.nordicsemi.android.ble.PhyRequest
+import no.nordicsemi.android.ble.ReadRequest
+import no.nordicsemi.android.ble.WriteRequest
+import no.nordicsemi.android.ble.callback.DataReceivedCallback
 import no.nordicsemi.android.ble.data.Data
 import java.util.*
 
@@ -21,10 +26,16 @@ class AppBleManager(context: Context) : BleManager(context) {
     /**
      * Services and Characteristics UUIDs
      */
-    private var mNusServiceUuid: UUID         = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
-    private var mSimplServiceUuid: UUID       = UUID.fromString("32A20001-ED70-480B-A945-866522F66758") /* NOTE: not a typo, the name of the custom service is SimpL service */
-    private var mSimplServiceTxCharUuid: UUID = UUID.fromString("32A20002-ED70-480B-A945-866522F66758")
-    private var mSimplServiceRxCharUuid: UUID = UUID.fromString("32A20003-ED70-480B-A945-866522F66758")
+    private var mNusServiceUuid: UUID =
+        UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+    private var mSimplServiceUuid: UUID =
+        UUID.fromString("32A20001-ED70-480B-A945-866522F66758") /* NOTE: not a typo, the name of the custom service is SimpL service */
+    private var mSimplServiceTxCharUuid: UUID =
+        UUID.fromString("32A20002-ED70-480B-A945-866522F66758")
+    private var mSimplServiceRxCharUuid: UUID =
+        UUID.fromString("32A20003-ED70-480B-A945-866522F66758")
+    private var mSimplServiceDevConfCharUuid: UUID =
+        UUID.fromString("32A20004-ED70-480B-A945-866522F66758")
 
     /**
      * From perspective of the *device*, this is where the device transmits data to,
@@ -37,8 +48,36 @@ class AppBleManager(context: Context) : BleManager(context) {
      */
     private lateinit var mSimplDeviceRxCharacteristic: BluetoothGattCharacteristic
 
-    fun sendToDevice() {
-        writeCharacteristic(mSimplDeviceRxCharacteristic, Data.opCode(0x01)).enqueue()
+    /**
+     * Read Device Configurations from this characteristic
+     */
+    private lateinit var mSimplDeviceConfCharacteristic: BluetoothGattCharacteristic
+
+
+    /**
+     * Send array of bytes to device
+     *
+     * Returns a WriteRequest object which can be used to set callbacks.
+     *
+     * @return WriteRequest object for callbacks
+     */
+    fun sendBytesToDevice(bytes: ByteArray): WriteRequest {
+        val ret: WriteRequest = writeCharacteristic(mSimplDeviceRxCharacteristic, bytes)
+        ret.enqueue()
+
+        return ret
+    }
+
+    /**
+     * Set notification callback on Device Configs Characteristic.
+     *
+     * This callback is invoked when notifications are received.
+     *
+     * @param callback Callback to be invoked on notifications
+     */
+    fun setDevConfCharNotificationCallback(callback: DataReceivedCallback) {
+        setNotificationCallback(mSimplDeviceConfCharacteristic).with(callback)
+        enableNotifications(mSimplDeviceConfCharacteristic).enqueue()
     }
 
     override fun getGattCallback(): BleManagerGattCallback {
@@ -68,8 +107,9 @@ class AppBleManager(context: Context) : BleManager(context) {
             /* get characteristics from service */
             allServicesAndCharsDetected = nusService != null && simplService != null
             if( allServicesAndCharsDetected ) {
-                mSimplDeviceTxCharacteristic = simplService!!.getCharacteristic(mSimplServiceTxCharUuid)
-                mSimplDeviceRxCharacteristic = simplService.getCharacteristic(mSimplServiceRxCharUuid)
+                mSimplDeviceTxCharacteristic   = simplService!!.getCharacteristic(mSimplServiceTxCharUuid)
+                mSimplDeviceRxCharacteristic   = simplService.getCharacteristic(mSimplServiceRxCharUuid)
+                mSimplDeviceConfCharacteristic = simplService.getCharacteristic(mSimplServiceDevConfCharUuid)
             }
 
             return allServicesAndCharsDetected
@@ -80,7 +120,15 @@ class AppBleManager(context: Context) : BleManager(context) {
          * Set required MTU and initial data.
          */
         override fun initialize() {
-            requestMtu(247).enqueue()
+            beginAtomicRequestQueue()
+                .add(requestMtu(247))
+//                .add(setPreferredPhy(
+//                    PhyRequest.PHY_LE_2M_MASK,
+//                    PhyRequest.PHY_LE_2M_MASK,
+//                    PhyRequest.PHY_OPTION_NO_PREFERRED))
+                .add(enableNotifications(mSimplDeviceTxCharacteristic))
+                .add(enableNotifications(mSimplDeviceConfCharacteristic))
+                .enqueue()
         }
 
         /**
