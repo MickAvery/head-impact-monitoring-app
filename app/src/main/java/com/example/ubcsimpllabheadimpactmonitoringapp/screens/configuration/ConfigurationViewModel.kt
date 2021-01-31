@@ -1,5 +1,6 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration
 
+import android.bluetooth.BluetoothClass
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,14 +14,6 @@ import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
  * @constructor Create empty Configuration view model
  */
 class ConfigurationViewModel(private val state: SavedStateHandle) : ViewModel() {
-    /**
-     * Some useful constants
-     */
-    companion object {
-        private val DATALOG_MODE = "datalogMode"
-    }
-
-    private val vmState = state
 
     var mDatalogMode: Configurations.DatalogModeEnum =
         Configurations.DatalogModeEnum.CONTINUOUS
@@ -48,22 +41,62 @@ class ConfigurationViewModel(private val state: SavedStateHandle) : ViewModel() 
     var mHighGAccelSamplingRate: Configurations.HighGAccelerometerSamplingEnum =
         Configurations.HighGAccelerometerSamplingEnum.HIGH_G_ACC_SAMPLE_6400HZ
 
+    var mDatalogEnabled: Boolean =
+        false
+
     /**
      * Set device configs
-     *
      */
-    fun setDeviceConfigs() {
-        DeviceModel.deviceSetConfigs(
-            mDatalogMode,
-            mTriggerOn,
-            mTriggerAxis,
-            mTrigThresholdResultant,
-            mTrigThresholdX,
-            mTrigThresholdY,
-            mTrigThresholdZ,
-            mGyroSamplingRate,
-            mLowGAccelSamplingRate,
-            mHighGAccelSamplingRate
-        )
+    fun setDeviceConfigs(
+        threshold_resultant: String,
+        threshold_x: String,
+        threshold_y: String,
+        threshold_z: String
+    ) {
+        var readyToSet = true
+
+        if(mDatalogMode == Configurations.DatalogModeEnum.TRIGGER) {
+
+            if(mTriggerAxis == Configurations.TriggerAxisEnum.RESULTANT) {
+
+                if(threshold_resultant == "") {
+                    readyToSet = false
+                } else {
+                    mTrigThresholdResultant = threshold_resultant.toShort()
+                }
+
+            } else {
+
+                if(threshold_x == "" || threshold_y == "" || threshold_z == "") {
+                    readyToSet = false
+                } else {
+                    mTrigThresholdX = threshold_x.toShort()
+                    mTrigThresholdY = threshold_y.toShort()
+                    mTrigThresholdZ = threshold_z.toShort()
+                }
+            }
+        }
+
+        if(readyToSet) {
+            DeviceModel.deviceSetConfigs(
+                mDatalogMode,
+                mTriggerOn,
+                mTriggerAxis,
+                mTrigThresholdResultant,
+                mTrigThresholdX,
+                mTrigThresholdY,
+                mTrigThresholdZ,
+                mGyroSamplingRate,
+                mLowGAccelSamplingRate,
+                mHighGAccelSamplingRate
+            )
+        }
+    }
+
+    /**
+     * Toggle datalog enable configuration
+     */
+    fun toggleDatalogEnable() {
+        DeviceModel.deviceToggleDatalogEnable()
     }
 }

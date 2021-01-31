@@ -24,6 +24,8 @@ object DeviceModel : ConnectionObserver {
 
     private lateinit var mBleManager: AppBleManager
 
+    private var mDatalogModeEnabled: Boolean = false
+
     private var mDevConfCharCallback: DataReceivedCallback = object: DeviceConfigDataCallback() { }
 
     private enum class Requests(val req: Byte) {
@@ -127,6 +129,18 @@ object DeviceModel : ConnectionObserver {
 
         Log.d("BLE", "$year -- $month -- $day -- $hour -- $minute -- $sec -- $ms")
         Log.d("BLE", "$bytes")
+        return mBleManager.sendBytesToDevice(bytes)
+    }
+
+    fun deviceToggleDatalogEnable(): WriteRequest {
+        var bytes: ByteArray = byteArrayOf(Requests.DEV_START_DATALOG.req)
+
+        if (mDatalogModeEnabled) {
+            bytes = byteArrayOf(Requests.DEV_STOP_DATALOG.req)
+        }
+
+        mDatalogModeEnabled =  !mDatalogModeEnabled
+
         return mBleManager.sendBytesToDevice(bytes)
     }
 

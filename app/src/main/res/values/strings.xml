@@ -21,6 +21,8 @@
     <!-- Datalog mode configuration strings -->
     <string name="config_screen_actionbar_title">Device Configurations</string>
     <string name="config_screen_datalog_mode_text">Datalog Mode</string>
+    <string name="config_screen_start_datalog_btn_text">Start Datalogging</string>
+    <string name="config_screen_stop_datalog_btn_text">Stop Datalogging</string>
 
     <string-array name="string_array_datalog_mode_options">
         <item>Continuous</item>

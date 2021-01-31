@@ -35,6 +35,7 @@ class ConfigurationFragment : Fragment() {
     private lateinit var mTrigThresholdY: EditText
     private lateinit var mTrigThresholdZ: EditText
     private lateinit var mConfigDevBtn: Button
+    private lateinit var mDatalogBtn: Button
 
     /**
      * Have fragment instantiate its interface views
@@ -279,36 +280,18 @@ class ConfigurationFragment : Fragment() {
          */
         mConfigDevBtn = mBinding.buttonConfigureDevice
         mConfigDevBtn.setOnClickListener {
-            var readyToSet = true
 
-            if(mViewModel.mDatalogMode == Configurations.DatalogModeEnum.TRIGGER) {
+            mViewModel.setDeviceConfigs(
+                mTrigThresholdResultant.text.toString(),
+                mTrigThresholdX.text.toString(),
+                mTrigThresholdY.text.toString(),
+                mTrigThresholdZ.text.toString())
 
-                if(mViewModel.mTriggerAxis == Configurations.TriggerAxisEnum.RESULTANT) {
+        }
 
-                    if(mTrigThresholdResultant.text.toString() == "") {
-                        readyToSet = false
-                    } else {
-                        mViewModel.mTrigThresholdResultant = mTrigThresholdResultant.text.toString().toShort()
-                    }
-
-                } else {
-
-                    if(mTrigThresholdX.text.toString() == "" ||
-                        mTrigThresholdY.text.toString() == "" ||
-                        mTrigThresholdZ.text.toString() == "") {
-                        readyToSet = false
-                    } else {
-                        mViewModel.mTrigThresholdX = mTrigThresholdX.text.toString().toShort()
-                        mViewModel.mTrigThresholdY = mTrigThresholdY.text.toString().toShort()
-                        mViewModel.mTrigThresholdZ = mTrigThresholdZ.text.toString().toShort()
-                    }
-
-                }
-
-            }
-
-            if(readyToSet)
-                mViewModel.setDeviceConfigs()
+        mDatalogBtn = mBinding.buttonStartDatalog
+        mDatalogBtn.setOnClickListener {
+            mViewModel.toggleDatalogEnable()
         }
     }
 }
