@@ -1,6 +1,7 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -19,9 +20,11 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         /* get device configs */
-        DeviceModel.deviceGetConfigs()
+        DeviceModel.deviceGetConfigs().fail { _, status ->
+            Log.d("BLE", "Failed to get configs...($status)")
+        }
 
         /* update device datetime */
-//        DeviceModel.deviceDatetimeSync()
+        DeviceModel.deviceSetDatetime()
     }
 }

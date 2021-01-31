@@ -2,6 +2,7 @@ package com.example.ubcsimpllabheadimpactmonitoringapp
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.icu.util.Calendar
 import android.util.Log
 import com.example.ubcsimpllabheadimpactmonitoringapp.ble.AppBleManager
 import no.nordicsemi.android.ble.ConnectRequest
@@ -10,7 +11,7 @@ import no.nordicsemi.android.ble.callback.DataReceivedCallback
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback
 import no.nordicsemi.android.ble.data.Data
 import no.nordicsemi.android.ble.observer.ConnectionObserver
-import kotlin.experimental.and
+import java.util.*
 
 /**
  * Device model, represents IMU device that app is connected to.
@@ -26,9 +27,11 @@ object DeviceModel : ConnectionObserver {
     private var mDevConfCharCallback: DataReceivedCallback = object: DeviceConfigDataCallback() { }
 
     private enum class Requests(val req: Byte) {
-        DEV_GET_CONFIGS  (0x00),
-        DEV_SET_CONFIG   (0x01),
-        DEV_SET_DATETIME (0x02)
+        DEV_GET_CONFIGS   (0x00),
+        DEV_SET_CONFIG    (0x01),
+        DEV_SET_DATETIME  (0x02),
+        DEV_START_DATALOG (0x03),
+        DEV_STOP_DATALOG  (0x04)
     }
 
     /**
@@ -67,9 +70,7 @@ object DeviceModel : ConnectionObserver {
     }
 
     /**
-     * Device set configs
-     *
-     * @param datalogMode
+     * Set device configurations
      */
     fun deviceSetConfigs(
         datalogMode: Configurations.DatalogModeEnum,
@@ -99,13 +100,59 @@ object DeviceModel : ConnectionObserver {
     }
 
     /**
-     * Short to byte array
+     * Set device datetime to match that of mobile app.
      *
-     * @param short
-     * @return
+     * Returns WriteRequest object which can be used to set callbacks.
+     *
+     * @return WriteRequest object which can be used to set callbacks
+     */
+    fun deviceSetDatetime(): WriteRequest {
+        val currentDatetime = Calendar.getInstance()
+        val year: Short = (currentDatetime.get(Calendar.YEAR)).toShort()
+        val month: Byte = (currentDatetime.get(Calendar.MONTH) + 1).toByte()
+        val day: Byte = currentDatetime.get(Calendar.DATE).toByte()
+        val hour: Byte = currentDatetime.get(Calendar.HOUR_OF_DAY).toByte()
+        val minute: Byte = currentDatetime.get(Calendar.MINUTE).toByte()
+        val sec: Byte = currentDatetime.get(Calendar.SECOND).toByte()
+        val ms: Int = currentDatetime.get(Calendar.MILLISECOND)
+
+        var bytes: ByteArray = byteArrayOf(Requests.DEV_SET_DATETIME.req)
+        bytes += shortToByteArray(year)
+        bytes += month
+        bytes += day
+        bytes += hour
+        bytes += minute
+        bytes += sec
+        bytes += intToByteArray(ms)
+
+        Log.d("BLE", "$year -- $month -- $day -- $hour -- $minute -- $sec -- $ms")
+        Log.d("BLE", "$bytes")
+        return mBleManager.sendBytesToDevice(bytes)
+    }
+
+    /**
+     * Convert Short type to ByteArray in little endian
+     *
+     * @param short Short to convert
+     * @return ByteArray in little endian
      */
     private fun shortToByteArray(short: Short): ByteArray {
-        return byteArrayOf( (short.toInt() and 0x00FF).toByte(), ((short.toInt() and 0x00FF) shr 8).toByte() )
+        return byteArrayOf( (short.toInt() and 0x00FF).toByte(), ((short.toInt() and 0xFF00) shr 8).toByte() )
+    }
+
+    /**
+     * Convert Int type to ByteArray in little endian
+     *
+     * @param int Int to convert
+     * @return ByteArray in little endian
+     */
+    private fun intToByteArray(int: Int): ByteArray {
+        return byteArrayOf(
+            (int and 0xFF).toByte(),
+            ((int and 0xFF00) shr 8).toByte(),
+            ((int and 0xFF0000) shr 16).toByte(),
+            ((int and 0xFF000000.toInt()) shr 24).toByte()
+        )
     }
 
     override fun onDeviceConnecting(device: BluetoothDevice) {
