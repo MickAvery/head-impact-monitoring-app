@@ -10,6 +10,7 @@ import no.nordicsemi.android.ble.callback.DataReceivedCallback
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback
 import no.nordicsemi.android.ble.data.Data
 import no.nordicsemi.android.ble.observer.ConnectionObserver
+import kotlin.experimental.and
 
 /**
  * Device model, represents IMU device that app is connected to.
@@ -26,8 +27,8 @@ object DeviceModel : ConnectionObserver {
 
     private enum class Requests(val req: Byte) {
         DEV_GET_CONFIGS  (0x00),
-        DEV_SET_DATETIME (0x01),
-        DEV_UPDATE_CONFIG(0x02)
+        DEV_SET_CONFIG   (0x01),
+        DEV_SET_DATETIME (0x02)
     }
 
     /**
@@ -65,11 +66,46 @@ object DeviceModel : ConnectionObserver {
         return mBleManager.sendBytesToDevice(bytes)
     }
 
-    override fun onDeviceReady(device: BluetoothDevice) {
-        Log.d("BLECONN", "onDeviceReady")
+    /**
+     * Device set configs
+     *
+     * @param datalogMode
+     */
+    fun deviceSetConfigs(
+        datalogMode: Configurations.DatalogModeEnum,
+        triggerOn: Configurations.TriggerOnEnum,
+        triggerAxis: Configurations.TriggerAxisEnum,
+        triggerThresholdResultant: Short,
+        triggerThresholdX: Short,
+        triggerThresholdY: Short,
+        triggerThresholdZ: Short,
+        gyroSampleRate: Configurations.GyroscopeSamplingEnum,
+        lowGAccSampleRate: Configurations.LowGAccelerometerSamplingEnum,
+        highGAccSampleRate: Configurations.HighGAccelerometerSamplingEnum
+    ): WriteRequest {
+        var bytes: ByteArray = byteArrayOf(Requests.DEV_SET_CONFIG.req)
+        bytes += datalogMode.ordinal.toByte()
+        bytes += triggerOn.ordinal.toByte()
+        bytes += triggerAxis.ordinal.toByte()
+        bytes += shortToByteArray(triggerThresholdResultant)
+        bytes += shortToByteArray(triggerThresholdX)
+        bytes += shortToByteArray(triggerThresholdY)
+        bytes += shortToByteArray(triggerThresholdZ)
+        bytes += gyroSampleRate.ordinal.toByte()
+        bytes += lowGAccSampleRate.ordinal.toByte()
+        bytes += highGAccSampleRate.ordinal.toByte()
 
-        /* Set notification callback for Device Configs Characteristic */
-        mBleManager.setDevConfCharNotificationCallback(mDevConfCharCallback)
+        return mBleManager.sendBytesToDevice(bytes)
+    }
+
+    /**
+     * Short to byte array
+     *
+     * @param short
+     * @return
+     */
+    private fun shortToByteArray(short: Short): ByteArray {
+        return byteArrayOf( (short.toInt() and 0x00FF).toByte(), ((short.toInt() and 0x00FF) shr 8).toByte() )
     }
 
     override fun onDeviceConnecting(device: BluetoothDevice) {
@@ -80,6 +116,13 @@ object DeviceModel : ConnectionObserver {
     override fun onDeviceConnected(device: BluetoothDevice) {
         /* Do nothing */
         Log.d("BLECONN", "onDeviceConnected")
+    }
+
+    override fun onDeviceReady(device: BluetoothDevice) {
+        Log.d("BLECONN", "onDeviceReady")
+
+        /* Set notification callback for Device Configs Characteristic */
+        mBleManager.setDevConfCharNotificationCallback(mDevConfCharCallback)
     }
 
     override fun onDeviceDisconnecting(device: BluetoothDevice) {

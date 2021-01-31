@@ -5,14 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations
-import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
 import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ConfigurationFragmentBinding
 
@@ -35,6 +30,10 @@ class ConfigurationFragment : Fragment() {
      */
     private lateinit var mDatalogModeSpinner: Spinner
     private lateinit var mTriggerOnSpinner: Spinner
+    private lateinit var mTrigThresholdResultant: EditText
+    private lateinit var mTrigThresholdX: EditText
+    private lateinit var mTrigThresholdY: EditText
+    private lateinit var mTrigThresholdZ: EditText
     private lateinit var mConfigDevBtn: Button
 
     /**
@@ -65,6 +64,14 @@ class ConfigurationFragment : Fragment() {
 
         /* set ActionBar title */
         activity?.title = getString(R.string.config_screen_actionbar_title)
+
+        /*
+         * Get EditText objects
+         */
+        mTrigThresholdResultant = mBinding.edittextTriggerThresholdResultant
+        mTrigThresholdX = mBinding.edittextTriggerThresholdX
+        mTrigThresholdY = mBinding.edittextTriggerThresholdY
+        mTrigThresholdZ = mBinding.edittextTriggerThresholdZ
 
         /*
          * set Spinner contents
@@ -123,13 +130,6 @@ class ConfigurationFragment : Fragment() {
                 android.R.layout.simple_spinner_dropdown_item,
                 Configurations.HighGAccelerometerSamplingEnum.values()
             )
-
-        /*
-         * Set spinner values based on state saved by ViewModel
-         * TODO: set spinner values based on saved device configs
-         */
-        mDatalogModeSpinner.setSelection(mViewModel.mDatalogMode.ordinal)
-        mTriggerOnSpinner.setSelection(mViewModel.mTriggerOn.ordinal)
 
         /*
          * Set view listeners
@@ -217,9 +217,98 @@ class ConfigurationFragment : Fragment() {
             }
         } /* AdapterView.OnItemSelectedListener */
 
+        /* "Gyroscope Sampling Rate" spinner listener */
+        gyroSampleRateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val itemSelected: Configurations.GyroscopeSamplingEnum =
+                    Configurations.GyroscopeSamplingEnum.values()[position]
+
+                mViewModel.mGyroSamplingRate = itemSelected
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+        }
+
+        /* "Low-G Accelerometer Sampling Rate" spinner listener */
+        lowGAccSampleRateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val itemSelected: Configurations.LowGAccelerometerSamplingEnum =
+                    Configurations.LowGAccelerometerSamplingEnum.values()[position]
+
+                mViewModel.mLowGAccelSamplingRate = itemSelected
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+        }
+
+        /* "High-G Accelerometer Sampling Rate" spinner listener */
+        highGAccSampleRateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val itemSelected: Configurations.HighGAccelerometerSamplingEnum =
+                    Configurations.HighGAccelerometerSamplingEnum.values()[position]
+
+                mViewModel.mHighGAccelSamplingRate = itemSelected
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                /* Do nothing */
+            }
+        }
+
+        /**
+         * Configure SET DEVICE CONFIGS button
+         */
         mConfigDevBtn = mBinding.buttonConfigureDevice
         mConfigDevBtn.setOnClickListener {
-            DeviceModel.deviceGetConfigs()
+            var readyToSet = true
+
+            if(mViewModel.mDatalogMode == Configurations.DatalogModeEnum.TRIGGER) {
+
+                if(mViewModel.mTriggerAxis == Configurations.TriggerAxisEnum.RESULTANT) {
+
+                    if(mTrigThresholdResultant.text.toString() == "") {
+                        readyToSet = false
+                    } else {
+                        mViewModel.mTrigThresholdResultant = mTrigThresholdResultant.text.toString().toShort()
+                    }
+
+                } else {
+
+                    if(mTrigThresholdX.text.toString() == "" ||
+                        mTrigThresholdY.text.toString() == "" ||
+                        mTrigThresholdZ.text.toString() == "") {
+                        readyToSet = false
+                    } else {
+                        mViewModel.mTrigThresholdX = mTrigThresholdX.text.toString().toShort()
+                        mViewModel.mTrigThresholdY = mTrigThresholdY.text.toString().toShort()
+                        mViewModel.mTrigThresholdZ = mTrigThresholdZ.text.toString().toShort()
+                    }
+
+                }
+
+            }
+
+            if(readyToSet)
+                mViewModel.setDeviceConfigs()
         }
     }
 }

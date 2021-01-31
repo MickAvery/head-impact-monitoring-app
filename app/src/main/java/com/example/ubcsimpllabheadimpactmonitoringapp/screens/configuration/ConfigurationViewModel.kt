@@ -1,8 +1,10 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations
+import com.example.ubcsimpllabheadimpactmonitoringapp.DeviceModel
 
 /**
  * Configuration view model, helps to save state of configuration screen,
@@ -29,6 +31,14 @@ class ConfigurationViewModel(private val state: SavedStateHandle) : ViewModel() 
     var mTriggerAxis: Configurations.TriggerAxisEnum =
         Configurations.TriggerAxisEnum.RESULTANT
 
+    var mTrigThresholdResultant: Short = 0
+
+    var mTrigThresholdX: Short = 0
+
+    var mTrigThresholdY: Short = 0
+
+    var mTrigThresholdZ: Short = 0
+
     var mGyroSamplingRate: Configurations.GyroscopeSamplingEnum =
         Configurations.GyroscopeSamplingEnum.GYRO_SAMPLE_4500HZ
 
@@ -38,11 +48,22 @@ class ConfigurationViewModel(private val state: SavedStateHandle) : ViewModel() 
     var mHighGAccelSamplingRate: Configurations.HighGAccelerometerSamplingEnum =
         Configurations.HighGAccelerometerSamplingEnum.HIGH_G_ACC_SAMPLE_6400HZ
 
-    fun getDeviceConfigs() {
-
-    }
-
+    /**
+     * Set device configs
+     *
+     */
     fun setDeviceConfigs() {
-
+        DeviceModel.deviceSetConfigs(
+            mDatalogMode,
+            mTriggerOn,
+            mTriggerAxis,
+            mTrigThresholdResultant,
+            mTrigThresholdX,
+            mTrigThresholdY,
+            mTrigThresholdZ,
+            mGyroSamplingRate,
+            mLowGAccelSamplingRate,
+            mHighGAccelSamplingRate
+        )
     }
 }

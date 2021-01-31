@@ -106,6 +106,7 @@ class AppBleManager(context: Context) : BleManager(context) {
 
             /* get characteristics from service */
             allServicesAndCharsDetected = nusService != null && simplService != null
+            allServicesAndCharsDetected = simplService != null
             if( allServicesAndCharsDetected ) {
                 mSimplDeviceTxCharacteristic   = simplService!!.getCharacteristic(mSimplServiceTxCharUuid)
                 mSimplDeviceRxCharacteristic   = simplService.getCharacteristic(mSimplServiceRxCharUuid)
