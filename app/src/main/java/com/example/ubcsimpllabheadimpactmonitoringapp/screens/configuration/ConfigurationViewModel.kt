@@ -1,7 +1,5 @@
 package com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration
 
-import android.bluetooth.BluetoothClass
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.ubcsimpllabheadimpactmonitoringapp.Configurations

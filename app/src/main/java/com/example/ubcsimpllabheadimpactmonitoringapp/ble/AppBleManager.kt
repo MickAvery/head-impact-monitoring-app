@@ -5,13 +5,9 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
-import com.example.ubcsimpllabheadimpactmonitoringapp.screens.MainActivity
 import no.nordicsemi.android.ble.BleManager
-import no.nordicsemi.android.ble.PhyRequest
-import no.nordicsemi.android.ble.ReadRequest
 import no.nordicsemi.android.ble.WriteRequest
 import no.nordicsemi.android.ble.callback.DataReceivedCallback
-import no.nordicsemi.android.ble.data.Data
 import java.util.*
 
 /**
