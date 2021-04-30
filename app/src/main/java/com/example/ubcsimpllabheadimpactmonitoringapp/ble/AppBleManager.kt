@@ -76,6 +76,18 @@ class AppBleManager(context: Context) : BleManager(context) {
         enableNotifications(mSimplDeviceConfCharacteristic).enqueue()
     }
 
+    /**
+     * Set notification callback on TX Characteristic.
+     *
+     * This callback is invoked when notifications are received.
+     *
+     * @param callback
+     */
+    fun setTxCharNotificationCallback(callback: DataReceivedCallback) {
+        setNotificationCallback(mSimplDeviceTxCharacteristic).with(callback)
+        enableNotifications(mSimplDeviceTxCharacteristic).enqueue()
+    }
+
     override fun getGattCallback(): BleManagerGattCallback {
         return AppBleManagerGattCallback()
     }

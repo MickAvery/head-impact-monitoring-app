@@ -25,14 +25,19 @@ object DeviceModel : ConnectionObserver {
 
     private var mDatalogModeEnabled: Boolean = false
 
+    /**
+     * Notification callbacks to be invoked when being notified by changes on an characteristic attribute
+     */
     private var mDevConfCharCallback: DataReceivedCallback = object: DeviceConfigDataCallback() { }
+    private var mTxCharCallback: DataReceivedCallback = object: TxCharacteristicDataCallback() { }
 
     private enum class Requests(val req: Byte) {
         DEV_GET_CONFIGS   (0x00),
         DEV_SET_CONFIG    (0x01),
         DEV_SET_DATETIME  (0x02),
         DEV_START_DATALOG (0x03),
-        DEV_STOP_DATALOG  (0x04)
+        DEV_STOP_DATALOG  (0x04),
+        DEV_REQUEST_LOGS  (0x05)
     }
 
     /**
@@ -131,6 +136,14 @@ object DeviceModel : ConnectionObserver {
         return mBleManager.sendBytesToDevice(bytes)
     }
 
+    /**
+     * Depending on whether datalogging is happening, request
+     * device to stop/start datalogging.
+     *
+     * Returns WriteRequest object which can be used to set callbacks.
+     *
+     * @return WriteRequest object which can be used to set callbacks
+     */
     fun deviceToggleDatalogEnable(): WriteRequest {
         var bytes: ByteArray = byteArrayOf(Requests.DEV_START_DATALOG.req)
 
@@ -141,6 +154,19 @@ object DeviceModel : ConnectionObserver {
         mDatalogModeEnabled =  !mDatalogModeEnabled
 
         return mBleManager.sendBytesToDevice(bytes)
+    }
+
+    /**
+     * Send a request to download datalogs from device
+     *
+     * Returns WriteRequest object which can be used to set callbacks.
+     *
+     * @return WriteRequest object which can be used to set callbacks
+     */
+    fun deviceRequestDatalogs(): WriteRequest {
+        var request: ByteArray = byteArrayOf(Requests.DEV_REQUEST_LOGS.req)
+
+        return mBleManager.sendBytesToDevice(request)
     }
 
     /**
@@ -183,6 +209,7 @@ object DeviceModel : ConnectionObserver {
 
         /* Set notification callback for Device Configs Characteristic */
         mBleManager.setDevConfCharNotificationCallback(mDevConfCharCallback)
+        mBleManager.setTxCharNotificationCallback(mTxCharCallback)
     }
 
     override fun onDeviceDisconnecting(device: BluetoothDevice) {
@@ -206,7 +233,6 @@ object DeviceModel : ConnectionObserver {
      * @constructor
      */
     private abstract class DeviceConfigDataCallback: ProfileDataCallback {
-
         /**
          * Goes here if notification received on Device Configs Characteristic
          *
@@ -218,4 +244,20 @@ object DeviceModel : ConnectionObserver {
         }
     }
 
+    /**
+     * Custom callback for Tx Characteristic
+     *
+     * @constructor
+     */
+    private abstract class TxCharacteristicDataCallback: ProfileDataCallback {
+        /**
+         * Goes here if notification received on TX Characteristic
+         *
+         * @param device
+         * @param data
+         */
+        override fun onDataReceived(device: BluetoothDevice, data: Data) {
+            Log.d("BLE" ,"$device --- ${data.size()}")
+        }
+    }
 }

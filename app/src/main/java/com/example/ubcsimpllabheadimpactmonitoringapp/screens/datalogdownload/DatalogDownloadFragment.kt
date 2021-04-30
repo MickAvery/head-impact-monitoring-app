@@ -6,15 +6,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.viewModels
 import com.example.ubcsimpllabheadimpactmonitoringapp.R
+import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.ConfigurationFragmentBinding
+import com.example.ubcsimpllabheadimpactmonitoringapp.databinding.DatalogDownloadFragmentBinding
+import com.example.ubcsimpllabheadimpactmonitoringapp.screens.configuration.ConfigurationViewModel
 
 class DatalogDownloadFragment : Fragment() {
 
     companion object {
         fun newInstance() = DatalogDownloadFragment()
     }
+    /**
+     * ViewModel and ViewBindings
+     */
+    private lateinit var mViewModel: DatalogDownloadViewModel
+    private lateinit var mBinding: DatalogDownloadFragmentBinding
 
-    private lateinit var viewModel: DatalogDownloadViewModel
 
     /**
      * The first to be called upon creation of MainActivity
@@ -23,8 +32,7 @@ class DatalogDownloadFragment : Fragment() {
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DatalogDownloadViewModel::class.java)
-        // TODO: Use the ViewModel
+        mViewModel = ViewModelProvider(this).get(DatalogDownloadViewModel::class.java)
     }
 
     /**
@@ -39,7 +47,9 @@ class DatalogDownloadFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.datalog_download_fragment, container, false)
+        /* get ViewBinding */
+        mBinding = DatalogDownloadFragmentBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
     /**
@@ -51,5 +61,10 @@ class DatalogDownloadFragment : Fragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.title = getString(R.string.datalog_download_screen_actionbar_title)
+
+        val downloadButton: Button = mBinding.buttonDatalogDownload
+        downloadButton.setOnClickListener {
+            mViewModel.requestDatalogs()
+        }
     }
 }
